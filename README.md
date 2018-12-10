@@ -1,6 +1,28 @@
 # CarND-Controls-MPC
 Self-Driving Car Engineer Nanodegree Program
 
+## Rubric Points
+
+- **The Model**: *Student describes their model in detail. This includes the state, actuators and update equations.*
+
+The kinematic model includes the vehicle's x and y coordinates, orientation angle (psi), and velocity, as well as the cross-track error, and psi error (epsi). The actuator outputs are acceleration (throttle) and delta (steering angle). The model combines the state and actuations from the previous timestep to calculate the state for the current timestep based on the equations below:
+
+![model](./model.png)
+
+- **Timestep Length and Elapsed Duration (N & dt)**: *Student discusses the reasoning behind the chosen N (timestep length) and dt (elapsed duration between timesteps) values. Additionally the student details the previous values tried.*
+
+The values chosen for N and dt are 10 and 0.1, respectively. These values were recommended to me after many failed attempts and when I went to the Slack group for help. These values mean that the optimizer is considering a one-second duration in which to determine a corrective trajectory. Adjusting either N or dt (even by small amounts) often produced very different behavior. I tried a multitude of other values, with N ranging from 5 up to 25, and dt ranging from 0.05 to 0.25.
+
+- **Polynomial Fitting and MPC Preprocessing**: *A polynomial is fitted to waypoints. If the student preprocesses waypoints, the vehicle state, and/or actuators prior to the MPC procedure it is described.*
+
+The waypoints are preprocessed by transforming them from world coordinates to vehicle coordinates This simplifies the polynomial regression because the vehicle's x and y coordinates are now (0, 0) with a zero-angle.
+
+- **Model Predictive Control with Latency**: *The student implements Model Predictive Control that handles a 100 millisecond latency. Student provides details on how they deal with latency.*
+
+One method to fight latency was to really just limit the speed.
+Also, since the actuations are applied one timestep later and the delay is the same amount as the timestep length, the equations have been altered to account for the delay. To create a slower round around sharp corners, I added a penalty for the velocity * steer angle.
+
+
 ---
 
 ## Dependencies
